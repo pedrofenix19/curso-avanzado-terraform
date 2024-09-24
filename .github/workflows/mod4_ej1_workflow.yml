@@ -29,11 +29,20 @@ jobs:
     #   uses: hashicorp/setup-terraform@v1
     #   with:
     #     cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+    # - name: Install Terraform
+    #   run: |
+    #     sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+    #     wget -O- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+    #     gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint
+    #     echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    #     sudo apt update && sudo apt install terraform
+    #     terraform --version
+
     - name: Install Terraform
       run: |
         wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-        run: echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-        run: sudo apt update && sudo apt install terraform
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt update && sudo apt install terraform
 
     - name: Move to project folder
       run: cd modulo4/github_actions/ej1
