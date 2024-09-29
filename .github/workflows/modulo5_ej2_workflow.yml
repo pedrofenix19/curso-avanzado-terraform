@@ -19,8 +19,6 @@ jobs:
     defaults:
       run:
         working-directory: ./modulo5/ej2
-    permissions:
-      issues: write  # Permisos para crear issues
     steps: 
       - name: clone_repo
         uses: actions/checkout@v3
@@ -37,6 +35,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Check Deployment Status
+        id: check_status
+        run: |
+          echo "¿Ha habido un despliegue? : ${{ secrets.HAS_BEEN_DEPLOYED }}"
+          if [ "${{ secrets.HAS_BEEN_DEPLOYED }}" == "true" ]; then
+            echo "No es el primer despliegue."
+            echo "is_first_deployment=false" >> $GITHUB_ENV
+          else
+            echo "Es el primer despliegue."
+            echo "is_first_deployment=true" >> $GITHUB_ENV
+
       - name: terraform_init
         run: |
           terraform init
@@ -47,13 +56,25 @@ jobs:
 
       - name: terraform_plan
         run: |
-          terraform plan -target module.ec2_instances -var-file terraform.tfvars
-          terraform plan -var-file terraform.tfvars
+          if [ "${{ env.is_first_deployment }}" == "true" ]; then
+            terraform plan -target=module.ec2_instances -var-file terraform.tfvars
+          else
+            terraform plan -var-file terraform.tfvars
+          fi
 
           
       - name: terraform_apply
         run: |
-          terraform apply -target module.ec2_instances -var-file terraform.tfvars -auto-approve
-          terraform apply -var-file terraform.tfvars -auto-approve
+          if [ "${{ env.is_first_deployment }}" == "true" ]; then
+            terraform apply -target=module.ec2_instances -var-file terraform.tfvars -auto-approve
+          else
+            terraform apply -var-file terraform.tfvars -auto-approve 
+          fi
+
+      - name: Update Deployment Status
+        if: steps.check_status.outputs.is_first_deployment == 'true'
+        run: |
+          echo "Actualizando estado del primer despliegue..."
+          echo "HAS_BEEN_DEPLOYED=true" | gh secret set HAS_BEEN_DEPLOYED
 
   
