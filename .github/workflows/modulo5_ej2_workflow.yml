@@ -3,6 +3,7 @@ name: "Despliegue de ejercicio práctico"
 on:
   push:
     paths:
+      - '.github/workflows/modulo5_ej2_workflow.yml'
       - 'modulo5/ej2/**'
     branches:
       - dev

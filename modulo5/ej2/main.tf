@@ -6,7 +6,7 @@ module "ec2_instances" {
   source             = "./instances"
   ami_id             = var.ami_id
   number_of_instances = var.number_of_instances
-  instance_name_prefix = var.instance_name_prefix
+  instance_name_prefix = var.instance_name_prefix 
 }
 
 resource "aws_s3_object" "public_ip_files" {
