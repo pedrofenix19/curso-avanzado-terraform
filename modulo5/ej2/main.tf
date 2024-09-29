@@ -1,35 +1,20 @@
-resource "aws_s3_bucket" "bucket" {
-  bucket_prefix = "bucket-test-terraform-${var.environment}"
+resource "aws_s3_bucket" "ips_bucket" {
+  bucket_prefix = "${var.instance_name_prefix}-ips-bucket-"
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_encryption" {
-  bucket = aws_s3_bucket.bucket.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm     = var.environment == "prod" ? "aws:kms" : "AES256"
-      kms_master_key_id = var.environment == "prod" ? module.pedro_key[0].key_id : null
-    }
-  }
+module "ec2_instances" {
+  source             = "./instances"
+  ami_id             = var.ami_id
+  number_of_instances = var.number_of_instances
+  instance_name_prefix = var.instance_name_prefix
 }
 
-module "pedro_key" {
-  source = "terraform-aws-modules/kms/aws"
+resource "aws_s3_object" "public_ip_files" {
+  for_each = module.ec2_instances.instance_ips
 
-  count       = var.environment == "prod" ? 1 : 0
-  description = "Pedro KMS key - (${var.environment})"
-  key_usage   = "ENCRYPT_DECRYPT"
-
-  key_administrators = ["arn:aws:iam::412381773585:root"]
-  key_users          = ["arn:aws:iam::412381773585:root"]
-
-  aliases = ["pedro-key-${var.environment}"]
-}
-
-resource "aws_s3_object" "files" {
-  for_each = var.bucket_files
-
-  bucket  = aws_s3_bucket.bucket.id
-  key     = each.key
+  bucket = aws_s3_bucket.ips_bucket.bucket
+  key    = "${each.key}.txt"
   content = each.value
+
+  depends_on = [ module.ec2_instances ]
 }

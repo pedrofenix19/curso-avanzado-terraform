@@ -14,7 +14,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket         = "curso-iac-avanzado-states"
-    key            = "pedro/modulo-github/terraform.tfstate"
+    key            = "pedro/modulo5-ej2/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "tabla-bloqueo-terraform2"
   }
