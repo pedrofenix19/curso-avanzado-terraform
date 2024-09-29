@@ -1,0 +1,10 @@
+import "http"
+import "json"
+
+request = http.request("https://dummyjson.com/test")
+response = json.unmarshal(http.get(request).body)
+#Retorna {"status":"ok","method":"GET"}
+
+main = rule {
+    response["status"] == "ok"
+}

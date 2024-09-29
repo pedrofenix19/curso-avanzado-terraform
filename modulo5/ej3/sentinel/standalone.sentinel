@@ -1,0 +1,19 @@
+param instance_type
+param instance_region
+
+valid_instance_types = ["t3.medium", "t3.large"]
+
+valid_regions = ["us-east-1", "us-east-2"]
+
+is_valid_region = rule {
+    instance_region in valid_regions
+}
+
+is_valid_instance_type = rule {
+    instance_type in valid_instance_types
+}
+
+main = rule {
+    # is_valid_instance_type and is_valid_region
+    "1.9" > "1.0"
+}

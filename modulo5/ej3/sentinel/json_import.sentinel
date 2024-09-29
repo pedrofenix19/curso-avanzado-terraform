@@ -1,0 +1,28 @@
+import "software_inventory"
+
+param terraform_min_version
+param sentinel_min_version
+
+instances_terraform_inventory = filter software_inventory as inventory {
+    inventory.application == "terraform"
+}
+
+instances_sentinel_inventory = filter software_inventory as inventory {
+    inventory.application == "sentinel"
+}
+
+terraform_versions_are_valid = rule {
+    all instances_terraform_inventory as inventory {
+        inventory.version >= terraform_min_version
+    }
+}
+
+sentinel_versions_are_valid = rule {
+    all instances_sentinel_inventory as inventory {
+        inventory.version >= sentinel_min_version
+    }
+}
+
+main = rule {
+    terraform_versions_are_valid and sentinel_versions_are_valid
+}

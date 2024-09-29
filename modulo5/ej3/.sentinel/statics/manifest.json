@@ -1,0 +1,10 @@
+{
+	"records": [
+		{
+			"key": "software_inventory",
+			"source": "./software_inventory/software_inventory.json",
+			"sourceSum": "",
+			"dest": "C:/Users/Clases/cursos/curso-avanzado-terraform/modulo5/ej3/software_inventory/software_inventory.json"
+		}
+	]
+}

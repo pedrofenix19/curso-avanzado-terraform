@@ -1,0 +1,8 @@
+[
+    {"instance": "isntance-1", "application": "terraform", "version": "1.5.0"},
+    {"instance": "isntance-1", "application": "sentinel",  "version": "0.28"},
+    {"instance": "isntance-2", "application": "terraform", "version": "1.9.6"},
+    {"instance": "isntance-2", "application": "sentinel",  "version": "0.28"},
+    {"instance": "isntance-3", "application": "terraform", "version": "1.9.6"},
+    {"instance": "isntance-3", "application": "sentinel",  "version": "0.26"}
+]
