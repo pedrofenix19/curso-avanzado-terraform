@@ -38,7 +38,6 @@ jobs:
       - name: Check Deployment Status
         id: check_status
         run: |
-          echo "¿Ha habido un despliegue? : ${{ secrets.HAS_BEEN_DEPLOYED }}"
           if [ "${{ secrets.HAS_BEEN_DEPLOYED }}" == "true" ]; then
             echo "No es el primer despliegue."
             echo "is_first_deployment=false" >> $GITHUB_ENV
