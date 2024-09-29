@@ -45,6 +45,7 @@ jobs:
           else
             echo "Es el primer despliegue."
             echo "is_first_deployment=true" >> $GITHUB_ENV
+          fi
 
       - name: terraform_init
         run: |
