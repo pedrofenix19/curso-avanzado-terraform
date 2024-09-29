@@ -13,6 +13,6 @@ resource "aws_s3_object" "public_ip_files" {
   for_each = module.ec2_instances.instance_ips
 
   bucket = aws_s3_bucket.ips_bucket.bucket
-  key    = each.key
+  key    = "${each.key}.txt"
   content = each.value
 }
