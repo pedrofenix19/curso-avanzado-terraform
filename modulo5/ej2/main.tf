@@ -10,11 +10,9 @@ module "ec2_instances" {
 }
 
 resource "aws_s3_object" "public_ip_files" {
-count   = length(module.ec2_instances.instance_ips)
+  for_each = module.ec2_instances.instance_ips
 
-  bucket  = aws_s3_bucket.ips_bucket.bucket
-  key     = "${var.instance_name_prefix}-ip-${count.index}.txt"
-  content = module.ec2_instances.instance_ips[count.index]
-
-  depends_on = [module.ec2_instances]
+  bucket = aws_s3_bucket.ips_bucket.bucket
+  key    = each.key
+  content = each.value
 }
