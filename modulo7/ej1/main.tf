@@ -13,19 +13,39 @@ resource "aws_instance" "ec2_instances" {
     Name = "${var.instance_name_prefix}-${count.index}"
   }
 }
-  
-resource "null_resource" "ansible" { 
-  count = var.number_of_instances
+
+resource "null_resource" "example" {
+    count = var.number_of_instances
   depends_on = [aws_instance.ec2_instances]
+  provisioner "remote-exec" {
+    connection {
+      host = aws_instance.ec2_instances[count.index].public_dns
+      user = "ec2-user"
+      private_key = file(var.private_key_file_path)
+    }
+
+    inline = ["echo 'connected!'"]
+  }
 
   provisioner "local-exec" {
     command = <<EOT
-      ansible-playbook -i ${aws_instance.ec2_instances[count.index].public_ip}, ansible/playbook.yml --private-key ${var.private_key_file_path} -u ubuntu
+      ansible-playbook -i ${aws_instance.ec2_instances[count.index].public_ip}, ansible/playbook.yml --private-key ${var.private_key_file_path} -u ec2-user
     EOT
   }
-
-  triggers = {
-    instance_ip = aws_instance.ec2_instances[count.index].public_ip
-  }
 }
+  
+# resource "null_resource" "ansible" { 
+#   count = var.number_of_instances
+#   depends_on = [aws_instance.ec2_instances]
+
+#   provisioner "local-exec" {
+#     command = <<EOT
+#       ansible-playbook -i ${aws_instance.ec2_instances[count.index].public_ip}, ansible/playbook.yml --private-key ${var.private_key_file_path} -u ec2-user
+#     EOT
+#   }
+
+#   triggers = {
+#     instance_ip = aws_instance.ec2_instances[count.index].public_ip
+#   }
+# }
 
