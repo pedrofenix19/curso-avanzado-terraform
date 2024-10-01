@@ -25,7 +25,7 @@ resource "null_resource" "ansible" {
   }
 
   triggers = {
-    instance_ip = aws_instance.example[count.index].public_ip
+    instance_ip = aws_instance.ec2_instances[count.index].public_ip
   }
 }
 
