@@ -20,7 +20,7 @@ resource "null_resource" "ansible" {
 
   provisioner "local-exec" {
     command = <<EOT
-      ansible-playbook -i ${aws_instance.example[count.index].public_ip}, ansible/playbook.yml --private-key <(echo "${var.private_key}") -u ubuntu
+      ansible-playbook -i ${aws_instance.ec2_instances[count.index].public_ip}, ansible/playbook.yml --private-key <(echo "${var.private_key}") -u ubuntu
     EOT
   }
 
