@@ -14,26 +14,51 @@ resource "aws_instance" "ec2_instances" {
   }
 }
 
-resource "time_sleep" "wait_30_seconds" {
-  count       = var.number_of_instances
-  depends_on  = [aws_instance.ec2_instances]
 
-  create_duration = "120s"
-}
-
-  
-resource "null_resource" "ansible" { 
+# Resource to wait until instance status checks are complete and the instance is running
+resource "null_resource" "wait_for_instance" {
   count = var.number_of_instances
-  depends_on = [time_sleep.wait_30_seconds]
 
   provisioner "local-exec" {
     command = <<EOT
-      ansible-playbook -i ${aws_instance.ec2_instances[count.index].public_ip}, ansible/playbook.yml --private-key ${var.private_key_file_path} -u ec2-user
+      aws ec2 wait instance-status-ok --instance-ids ${aws_instance.example[count.index].id}
     EOT
   }
 
   triggers = {
-    instance_ip = aws_instance.ec2_instances[count.index].public_ip
+    instance_id = aws_instance.example[count.index].id
+  }
+
+  depends_on = [aws_instance.example]
+}
+
+resource "null_resource" "ansible" {
+  count = var.number_of_instances
+  depends_on = [null_resource.wait_for_instance]
+
+  provisioner "local-exec" {
+    command = <<EOT
+      ansible-playbook -i ${aws_instance.example[count.index].public_ip}, ansible/playbook.yml --private-key ${var.private_key_file_path} -u ubuntu
+    EOT
+  }
+
+  triggers = {
+    instance_ip = aws_instance.example[count.index].public_ip
   }
 }
+  
+# resource "null_resource" "ansible" { 
+#   count = var.number_of_instances
+#   depends_on = [aws_instance.ec2_instances]
+
+#   provisioner "local-exec" {
+#     command = <<EOT
+#       ansible-playbook -i ${aws_instance.ec2_instances[count.index].public_ip}, ansible/playbook.yml --private-key ${var.private_key_file_path} -u ec2-user
+#     EOT
+#   }
+
+#   triggers = {
+#     instance_ip = aws_instance.ec2_instances[count.index].public_ip
+#   }
+# }
 
