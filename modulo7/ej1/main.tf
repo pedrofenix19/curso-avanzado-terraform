@@ -13,7 +13,7 @@ resource "aws_instance" "ec2_instances" {
     Name = "${var.instance_name_prefix}-${count.index}"
   }
 }
- 
+  
 resource "null_resource" "ansible" { 
   count = var.number_of_instances
   depends_on = [aws_instance.ec2_instances]
