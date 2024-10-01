@@ -3,6 +3,18 @@ import "static" "software_inventory" {
   format = "json"
 }
 
+sentinel {
+    features = {
+        terraform = true
+    }
+}
+
+import "plugin" "tfplan/v2" {
+  config = {
+    plan_path = "./plan.json"
+  }
+}
+
 policy "valid_instance_type" {
     source = "./sentinel/standalone.sentinel"
     enforcement_level = "advisory"
@@ -24,4 +36,9 @@ policy "validate_json_import" {
         terraform_min_version = "1.5.0"
         sentinel_min_version = "0.20"
     }
+}
+
+policy "http-public-ingress" {
+  source            = "./sentinel/validate_terraform.sentinel"
+  enforcement_level = "hard-mandatory"
 }

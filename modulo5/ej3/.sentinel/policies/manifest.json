@@ -1,12 +1,6 @@
 {
 	"records": [
 		{
-			"key": "valid_instance_type",
-			"source": "./sentinel/standalone.sentinel",
-			"sourceSum": "",
-			"dest": "C:/Users/Clases/cursos/curso-avanzado-terraform/modulo5/ej3/sentinel/standalone.sentinel"
-		},
-		{
 			"key": "validate_std_imports",
 			"source": "./sentinel/std_imports.sentinel",
 			"sourceSum": "",
@@ -17,6 +11,18 @@
 			"source": "./sentinel/json_import.sentinel",
 			"sourceSum": "",
 			"dest": "C:/Users/Clases/cursos/curso-avanzado-terraform/modulo5/ej3/sentinel/json_import.sentinel"
+		},
+		{
+			"key": "http-public-ingress",
+			"source": "./sentinel/validate_terraform.sentinel",
+			"sourceSum": "",
+			"dest": "C:/Users/Clases/cursos/curso-avanzado-terraform/modulo5/ej3/sentinel/validate_terraform.sentinel"
+		},
+		{
+			"key": "valid_instance_type",
+			"source": "./sentinel/standalone.sentinel",
+			"sourceSum": "",
+			"dest": "C:/Users/Clases/cursos/curso-avanzado-terraform/modulo5/ej3/sentinel/standalone.sentinel"
 		}
 	]
 }

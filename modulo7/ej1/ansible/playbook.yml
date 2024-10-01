@@ -1,0 +1,20 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Create a dummy web page
+      copy:
+        content: "<h1>Hello, World!</h1><p>This is a dummy web page served by Nginx.</p>"
+        dest: /var/www/html/index.html
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
