@@ -14,13 +14,13 @@ jobs:
       run:
         working-directory: ./modulo7/ej1
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: clone_repo
+        uses: actions/checkout@v3
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.9.6
+      - name: install_terraform
+        uses: hashicorp/setup-terraform@v3
+        with: 
+          terraform_version: "1.9.6"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
