@@ -14,7 +14,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket         = "curso-iac-avanzado-states"
-    key            = "pedro/modulo6-ej2/terraform.tfstate"
+    key            = "pedro/modulo6/terraform.tfstate"
     region         = "us-east-1"
   }
 }
