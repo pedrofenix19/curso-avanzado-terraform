@@ -18,7 +18,7 @@ resource "time_sleep" "wait_30_seconds" {
   count       = var.number_of_instances
   depends_on  = [aws_instance.ec2_instances]
 
-  create_duration = "60s"
+  create_duration = "120s"
 }
 
   
