@@ -29,6 +29,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/key.pem
+          chmod 600 ~/.ssh/key.pem 
+
       - name: Terraform Init
         run: terraform init
 
@@ -42,4 +48,5 @@ jobs:
         env:
           TF_VAR_public_key: ${{ secrets.SSH_PUBLIC_KEY }} # Public key from GitHub secrets
           TF_VAR_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # Private key from GitHub secrets
+          private_key_file_path: "~/.ssh/key.pem"
         run: terraform apply -var-file terraform.tfvars -auto-approve

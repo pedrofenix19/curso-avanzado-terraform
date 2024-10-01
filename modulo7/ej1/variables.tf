@@ -3,7 +3,7 @@ variable "public_key" {
   type        = string
 }
 
-variable "private_key" {
+variable "private_key_file_path" {
   description = "The private SSH key to connect to the instance."
   type        = string
 }
