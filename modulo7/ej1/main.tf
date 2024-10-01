@@ -14,7 +14,7 @@ resource "aws_instance" "ec2_instances" {
   }
 }
  
-resource "null_resource" "ansible" { 
+resource "null_resource" "ansible" {  
   count = var.number_of_instances
   depends_on = [aws_instance.ec2_instances]
 
