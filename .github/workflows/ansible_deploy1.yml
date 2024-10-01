@@ -5,7 +5,7 @@ on:
     paths:
         - 'modulo7/ej1/**'
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
