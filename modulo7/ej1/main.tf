@@ -21,12 +21,12 @@ resource "null_resource" "wait_for_instance" {
 
   provisioner "local-exec" {
     command = <<EOT
-      aws ec2 wait instance-status-ok --instance-ids ${aws_instance.example[count.index].id}
+      aws ec2 wait instance-status-ok --instance-ids ${aws_instance.ec2_instances[count.index].id}
     EOT
   }
 
   triggers = {
-    instance_id = aws_instance.example[count.index].id
+    instance_id = aws_instance.ec2_instances[count.index].id
   }
 
   depends_on = [aws_instance.example]

@@ -15,6 +15,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_sse" {
 
 module "pedro_key" {
   source = "terraform-aws-modules/kms/aws"
+  version = "3.1.0"
 
   count = var.environment == "prod" ? 1 : 0
   description = "Pedro KMS key - (${var.environment})"
