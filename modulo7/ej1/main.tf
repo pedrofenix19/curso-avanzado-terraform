@@ -29,7 +29,7 @@ resource "null_resource" "wait_for_instance" {
     instance_id = aws_instance.ec2_instances[count.index].id
   }
 
-  depends_on = [aws_instance.example]
+  depends_on = [aws_instance.ec2_instances]
 }
 
 resource "null_resource" "ansible" {
@@ -38,12 +38,12 @@ resource "null_resource" "ansible" {
 
   provisioner "local-exec" {
     command = <<EOT
-      ansible-playbook -i ${aws_instance.example[count.index].public_ip}, ansible/playbook.yml --private-key ${var.private_key_file_path} -u ubuntu
+      ansible-playbook -i ${aws_instance.ec2_instances[count.index].public_ip}, ansible/playbook.yml --private-key ${var.private_key_file_path} -u ubuntu
     EOT
   }
 
   triggers = {
-    instance_ip = aws_instance.example[count.index].public_ip
+    instance_ip = aws_instance.ec2_instances[count.index].public_ip
   }
 }
   
