@@ -8,7 +8,7 @@ resource "aws_instance" "ec2_instances" {
   ami           = var.ami_id
   instance_type = "t2.micro"
   key_name      = aws_key_pair.instance_key_pair.key_name
-  security_groups = [aws_security_group.my_ec2_sg]
+  security_groups = [aws_security_group.my_ec2_sg.name]
 
   tags = {
     Name = "${var.instance_name_prefix}-${count.index}"
